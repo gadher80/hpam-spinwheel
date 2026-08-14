@@ -5,6 +5,7 @@ import { ConfettiEngine } from '../lib/confetti';
 
 export interface WheelHandle {
   spin: () => void;
+  dismiss: () => void;
 }
 
 interface WheelProps {
@@ -161,7 +162,13 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
     requestAnimationFrame(frame);
   }
 
-  useImperativeHandle(ref, () => ({ spin: runSpin }));
+  function dismiss() {
+    setWinnerCard((w) => ({ ...w, show: false }));
+    setBlurred(false);
+    setPointerLabel({ show: false, text: '' });
+  }
+
+  useImperativeHandle(ref, () => ({ spin: runSpin, dismiss }));
 
   useEffect(() => {
     drawWheel(rotationRef.current);
@@ -177,16 +184,12 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
     }
   }, []);
 
+  // Mirrors spinToken's role: any change (from this tab or a synced remote
+  // one, e.g. admin pressing Escape) clears the winner display here too.
   useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key !== 'Escape') return;
-      setWinnerCard((w) => ({ ...w, show: false }));
-      setBlurred(false);
-      setPointerLabel({ show: false, text: '' });
-    }
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
+    dismiss();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.dismissToken]);
 
   const pointerClass = 'pointer' + (state.pointerStyle === 'classic' ? '' : ` ${state.pointerStyle}`) + (pointerWiggle ? ' wiggle' : '');
 

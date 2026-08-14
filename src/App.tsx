@@ -82,6 +82,17 @@ export default function App() {
     }
   }
 
+  // ---- Escape clears the winner popup/blur here AND on every other open tab/device ----
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== 'Escape') return;
+      wheelRef.current?.dismiss();
+      update({ dismissToken: stateRef.current.dismissToken + 1 });
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [update]);
+
   // ---- hash routing ----
   useEffect(() => {
     const onHash = () => setIsAdminRoute(location.hash === '#admin');

@@ -43,6 +43,7 @@ export interface WheelState {
   fontColor: string;
   results: ResultEntry[];
   spinToken: number;
+  dismissToken: number;
 }
 
 export const PALETTE = ['#5e8298', '#aa8ca4', '#86b5bf', '#e0b7c7', '#786883', '#c1a5ce', '#9fced4', '#15999e'];
@@ -88,6 +89,7 @@ export function defaultState(): WheelState {
     fontColor: '#ffffff',
     results: [],
     spinToken: 0,
+    dismissToken: 0,
   };
 }
 
