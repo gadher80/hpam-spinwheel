@@ -33,7 +33,7 @@ main {
 }
 
 .wheelWrap { position: relative; flex: 0 0 auto; }
-#wheel { display: block; width: min(85vw, 70vh, 760px); height: min(85vw, 70vh, 760px); border-radius: 50%; box-shadow: 0 10px 40px #3d1a5c55, 0 0 0 10px #fff, 0 0 0 14px var(--gold); }
+#wheel { display: block; width: min(92vw, 78vh, 860px); height: min(92vw, 78vh, 860px); border-radius: 50%; box-shadow: 0 10px 40px #3d1a5c55, 0 0 0 10px #fff, 0 0 0 14px var(--gold); }
 .pointer {
   position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
   width: 36px; height: 34px; background: var(--purple-deep); z-index: 5;
