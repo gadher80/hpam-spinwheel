@@ -66,7 +66,10 @@ export default function App() {
   }, []);
 
   function triggerSpin() {
-    update({ spinToken: state.spinToken + 1 });
+    const nextToken = stateRef.current.spinToken + 1;
+    update({ spinToken: nextToken });
+    lastSpinToken.current = nextToken; // don't double-spin if the realtime echo arrives later
+    wheelRef.current?.spin();
   }
 
   function onWinner(m: Member) {
@@ -116,7 +119,7 @@ export default function App() {
       </IconButton>
 
       <Box component="main" sx={{ maxWidth: 1100, mx: 'auto', p: 2.5, display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        {loaded && <Wheel ref={wheelRef} state={state} onWinner={onWinner} />}
+        {loaded && <Wheel ref={wheelRef} state={state} onWinner={onWinner} onHubClick={triggerSpin} />}
         {showAdmin && <AdminPanel state={state} update={update} onSpin={triggerSpin} />}
       </Box>
 

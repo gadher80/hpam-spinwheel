@@ -10,11 +10,12 @@ export interface WheelHandle {
 interface WheelProps {
   state: WheelState;
   onWinner: (member: Member) => void;
+  onHubClick?: () => void;
 }
 
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - t, 3); }
 
-const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner }, ref) => {
+const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const confettiCanvasRef = useRef<HTMLCanvasElement>(null);
   const confettiRef = useRef<ConfettiEngine | null>(null);
@@ -184,7 +185,7 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner }, ref) => 
         <div ref={pointerRef} className={pointerClass} onAnimationEnd={() => setPointerWiggle(false)} />
         <div className={'pointerLabel' + (pointerLabel.show ? ' show' : '')}>{pointerLabel.text}</div>
         <canvas ref={canvasRef} id="wheel" width={760} height={760} />
-        <div className="hub" id="hubEl">
+        <div className="hub" id="hubEl" onClick={onHubClick} style={{ cursor: onHubClick ? 'pointer' : undefined }}>
           <img className="hubArt" src="/Hub Flower.png" alt="" />
         </div>
         <div className="winnerBanner">
