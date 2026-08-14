@@ -76,6 +76,7 @@ main {
 .pointerLabel.show { opacity: 1; transform: translateX(-50%) scale(1); }
 
 #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+.dismissOverlay { position: fixed; inset: 0; z-index: 60; background: transparent; cursor: pointer; }
 
 ul.memberList { list-style: none; margin: 0; padding: 0; max-height: 260px; overflow: auto; }
 ul.memberList li {

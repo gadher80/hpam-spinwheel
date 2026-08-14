@@ -12,11 +12,12 @@ interface WheelProps {
   state: WheelState;
   onWinner: (member: Member) => void;
   onHubClick?: () => void;
+  onDismiss?: () => void;
 }
 
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - t, 3); }
 
-const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick }, ref) => {
+const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick, onDismiss }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const confettiCanvasRef = useRef<HTMLCanvasElement>(null);
   const confettiRef = useRef<ConfettiEngine | null>(null);
@@ -214,6 +215,13 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
         </div>
       </div>
       <canvas ref={confettiCanvasRef} id="confettiCanvas" />
+      {(blurred || winnerCard.show || pointerLabel.show) && (
+        <div
+          className="dismissOverlay"
+          onClick={() => onDismiss?.()}
+          title="Tap anywhere to return to the wheel"
+        />
+      )}
     </>
   );
 });

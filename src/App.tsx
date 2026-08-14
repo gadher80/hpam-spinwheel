@@ -82,16 +82,20 @@ export default function App() {
     }
   }
 
-  // ---- Escape clears the winner popup/blur here AND on every other open tab/device ----
+  // ---- clears the winner popup/blur here AND on every other open tab/device ----
+  // (Escape key on desktop; a tap-anywhere overlay in Wheel handles it on mobile, where there's no Escape key)
+  const requestDismiss = useCallback(() => {
+    wheelRef.current?.dismiss();
+    update({ dismissToken: stateRef.current.dismissToken + 1 });
+  }, [update]);
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key !== 'Escape') return;
-      wheelRef.current?.dismiss();
-      update({ dismissToken: stateRef.current.dismissToken + 1 });
+      if (e.key === 'Escape') requestDismiss();
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [update]);
+  }, [requestDismiss]);
 
   // ---- hash routing ----
   useEffect(() => {
@@ -130,7 +134,7 @@ export default function App() {
       </IconButton>
 
       <Box component="main" sx={{ maxWidth: 1100, mx: 'auto', p: 2.5, display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        {loaded && <Wheel ref={wheelRef} state={state} onWinner={onWinner} onHubClick={triggerSpin} />}
+        {loaded && <Wheel ref={wheelRef} state={state} onWinner={onWinner} onHubClick={triggerSpin} onDismiss={requestDismiss} />}
         {showAdmin && <AdminPanel state={state} update={update} onSpin={triggerSpin} />}
       </Box>
 
