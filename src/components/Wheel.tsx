@@ -190,7 +190,10 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
         </div>
         <div className="winnerBanner">
           <div className={'winnerCard' + (winnerCard.show ? ' show' : '')}>
-            <img className="winnerPhoto" src={winnerCard.photo} alt="" />
+            <img
+              className="winnerPhoto" src={winnerCard.photo} alt=""
+              onError={(e) => { (e.target as HTMLImageElement).src = DEFAULT_PHOTO; }}
+            />
             <small>WINNER</small>
             <span>{winnerCard.name || '—'}</span>
           </div>

@@ -53,7 +53,7 @@ main {
   display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden;
 }
 .hub .hubArt { width: 88%; height: 88%; object-fit: contain; }
-.winnerBanner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.winnerBanner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 20; }
 .winnerCard {
   background: var(--purple-deep); color: #fff; padding: 18px 34px; border-radius: 16px;
   font-size: clamp(20px, 3vw, 32px); text-align: center; box-shadow: 0 10px 40px #0007;

@@ -11,6 +11,8 @@ import {
 } from '../lib/state';
 import { SPIN_PRESETS, WIN_PRESETS, setCustomSoundData } from '../lib/sounds';
 import { CONFETTI_EFFECTS } from '../lib/confetti';
+import { supabase } from '../lib/supabase';
+import PhotoCropDialog from './PhotoCropDialog';
 
 interface AdminPanelProps {
   state: WheelState;
@@ -26,6 +28,7 @@ export default function AdminPanel({ state, update, onSpin }: AdminPanelProps) {
   const [nameInput, setNameInput] = useState('');
   const [status, setStatus] = useState('');
   const dragId = useRef<string | null>(null);
+  const [cropFor, setCropFor] = useState<{ id: string; file: File } | null>(null);
 
   function addMember() {
     const name = nameInput.trim();
@@ -49,8 +52,17 @@ export default function AdminPanel({ state, update, onSpin }: AdminPanelProps) {
     update({ members });
   }
 
-  function setPhoto(id: string, dataUrl: string) {
-    update({ members: state.members.map((m) => (m.id === id ? { ...m, photo: dataUrl } : m)) });
+  function setPhoto(id: string, url: string) {
+    update({ members: state.members.map((m) => (m.id === id ? { ...m, photo: url } : m)) });
+  }
+
+  async function uploadCroppedPhoto(id: string, blob: Blob) {
+    setCropFor(null);
+    const path = `${id}-${Date.now()}.jpg`;
+    const { error } = await supabase.storage.from('member-photos').upload(path, blob, { contentType: 'image/jpeg' });
+    if (error) { setStatus('Photo upload failed: ' + error.message); return; }
+    const { data } = supabase.storage.from('member-photos').getPublicUrl(path);
+    setPhoto(id, data.publicUrl);
   }
 
   function shuffle() {
@@ -122,14 +134,16 @@ export default function AdminPanel({ state, update, onSpin }: AdminPanelProps) {
                   onDrop={() => onDrop(m.id)}
                 >
                   <label>
-                    <img className="thumb" src={m.photo || DEFAULT_PHOTO} title="Click to change photo" />
+                    <img
+                      className="thumb" src={m.photo || DEFAULT_PHOTO} title="Click to change photo"
+                      onError={(e) => { (e.target as HTMLImageElement).src = DEFAULT_PHOTO; }}
+                    />
                     <input
                       type="file" accept="image/*" style={{ display: 'none' }}
                       onChange={(e) => {
                         const f = e.target.files?.[0]; if (!f) return;
-                        const reader = new FileReader();
-                        reader.onload = () => setPhoto(m.id, reader.result as string);
-                        reader.readAsDataURL(f);
+                        setCropFor({ id: m.id, file: f });
+                        e.target.value = '';
                       }}
                     />
                   </label>
@@ -294,6 +308,14 @@ export default function AdminPanel({ state, update, onSpin }: AdminPanelProps) {
         )}
 
       </Box>
+
+      {cropFor && (
+        <PhotoCropDialog
+          file={cropFor.file}
+          onCancel={() => setCropFor(null)}
+          onCropped={(blob) => uploadCroppedPhoto(cropFor.id, blob)}
+        />
+      )}
     </Paper>
   );
 }

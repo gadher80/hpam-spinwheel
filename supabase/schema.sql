@@ -39,3 +39,18 @@ create or replace function public.merge_wheel_state(patch jsonb)
 returns void language sql as $$
   update public.wheel_state set data = data || patch where id = 1;
 $$;
+
+-- Storage bucket for member photos. Photos are cropped/resized client-side
+-- to small JPEGs and uploaded here, so the shared state row only ever holds
+-- a short URL — not multi-MB base64 blobs (which was overloading the
+-- realtime broadcast payload and causing syncs to silently stop working).
+insert into storage.buckets (id, name, public)
+values ('member-photos', 'member-photos', true)
+on conflict (id) do nothing;
+
+create policy "member photos public read" on storage.objects
+  for select using (bucket_id = 'member-photos');
+create policy "member photos public upload" on storage.objects
+  for insert with check (bucket_id = 'member-photos');
+create policy "member photos public update" on storage.objects
+  for update using (bucket_id = 'member-photos');
