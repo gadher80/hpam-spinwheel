@@ -30,3 +30,12 @@ create trigger wheel_state_updated_at
   for each row execute function public.set_updated_at();
 
 -- Enable Realtime for this table: Database > Replication > supabase_realtime > add wheel_state.
+
+-- Merges only the changed fields into the row, atomically, server-side.
+-- Using this instead of a full-row overwrite prevents one browser tab/device
+-- from clobbering changes another tab made concurrently (last-write-wins on
+-- the whole blob was overwriting members/settings set by other open tabs).
+create or replace function public.merge_wheel_state(patch jsonb)
+returns void language sql as $$
+  update public.wheel_state set data = data || patch where id = 1;
+$$;

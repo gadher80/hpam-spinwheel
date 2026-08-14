@@ -62,7 +62,7 @@ export default function App() {
     const next = { ...stateRef.current, ...patch };
     setState(next);
     stateRef.current = next;
-    supabase.from(STATE_TABLE).update({ data: next }).eq('id', STATE_ROW_ID).then();
+    supabase.rpc('merge_wheel_state', { patch }).then();
   }, []);
 
   function triggerSpin() {
