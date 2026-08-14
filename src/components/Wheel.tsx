@@ -177,6 +177,17 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
     }
   }, []);
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== 'Escape') return;
+      setWinnerCard((w) => ({ ...w, show: false }));
+      setBlurred(false);
+      setPointerLabel({ show: false, text: '' });
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   const pointerClass = 'pointer' + (state.pointerStyle === 'classic' ? '' : ` ${state.pointerStyle}`) + (pointerWiggle ? ' wiggle' : '');
 
   return (
