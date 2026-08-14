@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { DEFAULT_PHOTO, PALETTE, getDisplayMembers, type Member, type WheelState } from '../lib/state';
+import { DEFAULT_PHOTO, PALETTE, getDisplayMembers, handleImgError, type Member, type WheelState } from '../lib/state';
 import { SPIN_PRESETS, WIN_PRESETS } from '../lib/sounds';
 import { ConfettiEngine } from '../lib/confetti';
 
@@ -203,7 +203,7 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
           <div className={'winnerCard' + (winnerCard.show ? ' show' : '')}>
             <img
               className="winnerPhoto" src={winnerCard.photo} alt=""
-              onError={(e) => { (e.target as HTMLImageElement).src = DEFAULT_PHOTO; }}
+              onError={(e) => handleImgError(e, winnerCard.photo)}
             />
             <small>WINNER</small>
             <span>{winnerCard.name || '—'}</span>

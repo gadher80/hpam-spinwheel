@@ -6,7 +6,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
-  DEFAULT_PHOTO, PALETTE, fmtPct, type WheelState, type Member,
+  DEFAULT_PHOTO, PALETTE, fmtPct, handleImgError, type WheelState, type Member,
   type ConfettiEffect, type PointerStyle, type FontFormat,
 } from '../lib/state';
 import { SPIN_PRESETS, WIN_PRESETS, setCustomSoundData } from '../lib/sounds';
@@ -136,7 +136,7 @@ export default function AdminPanel({ state, update, onSpin }: AdminPanelProps) {
                   <label>
                     <img
                       className="thumb" src={m.photo || DEFAULT_PHOTO} title="Click to change photo"
-                      onError={(e) => { (e.target as HTMLImageElement).src = DEFAULT_PHOTO; }}
+                      onError={(e) => handleImgError(e, m.photo || DEFAULT_PHOTO)}
                     />
                     <input
                       type="file" accept="image/*" style={{ display: 'none' }}

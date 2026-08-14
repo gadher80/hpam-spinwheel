@@ -1,3 +1,5 @@
+import type { SyntheticEvent } from 'react';
+
 export interface Member {
   id: string;
   name: string;
@@ -45,6 +47,20 @@ export interface WheelState {
 
 export const PALETTE = ['#5e8298', '#aa8ca4', '#86b5bf', '#e0b7c7', '#786883', '#c1a5ce', '#9fced4', '#15999e'];
 export const DEFAULT_PHOTO = '/Logo Transparent Clean.png';
+
+// A freshly-uploaded Storage photo can briefly 404 before it's fully available.
+// Retry a few times before giving up and falling back to the default photo,
+// instead of permanently hiding a valid photo on the first transient failure.
+export function handleImgError(e: SyntheticEvent<HTMLImageElement>, realSrc: string) {
+  const img = e.currentTarget;
+  const tries = Number(img.dataset.tries || '0');
+  if (tries < 3) {
+    img.dataset.tries = String(tries + 1);
+    setTimeout(() => { img.src = realSrc; }, 700);
+  } else {
+    img.src = DEFAULT_PHOTO;
+  }
+}
 
 export function defaultState(): WheelState {
   return {
