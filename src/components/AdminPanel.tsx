@@ -291,6 +291,20 @@ export default function AdminPanel({ state, update, onSpin }: AdminPanelProps) {
                 </Button>
               ))}
             </Stack>
+
+            <Typography variant="caption">Font color</Typography>
+            <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+              <input
+                type="color" value={state.fontColor}
+                onChange={(e) => update({ fontColor: e.target.value })}
+                style={{ width: 44, height: 36, padding: 0, border: 'none', borderRadius: 6, cursor: 'pointer' }}
+              />
+              <TextField
+                size="small" value={state.fontColor}
+                onChange={(e) => update({ fontColor: e.target.value })}
+                sx={{ width: 110 }}
+              />
+            </Stack>
           </Stack>
         )}
 

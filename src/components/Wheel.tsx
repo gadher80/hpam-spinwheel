@@ -67,7 +67,7 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
       if (!s.blindMode) {
         ctx.save();
         ctx.rotate(start + a / 2);
-        ctx.textAlign = 'right'; ctx.fillStyle = '#fff';
+        ctx.textAlign = 'right'; ctx.fillStyle = s.fontColor;
         const styleStr = s.fontFormat === 'italic' ? 'italic ' : '';
         const weightStr = s.fontFormat === 'bold' ? 'bold ' : '';
         ctx.font = `${styleStr}${weightStr}${s.fontSize}px Georgia`;

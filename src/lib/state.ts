@@ -38,6 +38,7 @@ export interface WheelState {
   spinDirection: SpinDirection;
   fontSize: number;
   fontFormat: FontFormat;
+  fontColor: string;
   results: ResultEntry[];
   spinToken: number;
 }
@@ -68,6 +69,7 @@ export function defaultState(): WheelState {
     spinDirection: 'cw',
     fontSize: 15,
     fontFormat: 'normal',
+    fontColor: '#ffffff',
     results: [],
     spinToken: 0,
   };
