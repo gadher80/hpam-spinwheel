@@ -4,6 +4,7 @@ export interface Member {
   id: string;
   name: string;
   photo?: string | null;
+  color?: string | null;
 }
 
 export interface ResultEntry {

@@ -63,7 +63,7 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
     members.forEach((m, i) => {
       const start = i * a, end = start + a;
       ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, R - 6, start, end); ctx.closePath();
-      ctx.fillStyle = PALETTE[i % PALETTE.length]; ctx.fill();
+      ctx.fillStyle = m.color || PALETTE[i % PALETTE.length]; ctx.fill();
       ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
       if (!s.blindMode) {
         ctx.save();
@@ -81,7 +81,7 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
 
     if (s.matchPointerColor && pointerRef.current) {
       const idx = currentPointerSlice(members, rot);
-      if (idx >= 0) pointerRef.current.style.background = PALETTE[idx % PALETTE.length];
+      if (idx >= 0) pointerRef.current.style.background = members[idx].color || PALETTE[idx % PALETTE.length];
     } else if (pointerRef.current) {
       pointerRef.current.style.background = 'var(--purple-deep)';
     }

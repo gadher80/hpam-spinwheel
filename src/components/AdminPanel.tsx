@@ -56,6 +56,10 @@ export default function AdminPanel({ state, update, onSpin }: AdminPanelProps) {
     update({ members: state.members.map((m) => (m.id === id ? { ...m, photo: url } : m)) });
   }
 
+  function setColor(id: string, color: string) {
+    update({ members: state.members.map((m) => (m.id === id ? { ...m, color } : m)) });
+  }
+
   async function uploadCroppedPhoto(id: string, blob: Blob) {
     setCropFor(null);
     const path = `${id}-${Date.now()}.jpg`;
@@ -147,9 +151,18 @@ export default function AdminPanel({ state, update, onSpin }: AdminPanelProps) {
                       }}
                     />
                   </label>
-                  <span className="swatch" style={{ background: PALETTE[i % PALETTE.length] }} />
+                  <input
+                    type="color" className="swatch" title="Wedge color"
+                    value={m.color || PALETTE[i % PALETTE.length]}
+                    onChange={(e) => setColor(m.id, e.target.value)}
+                  />
                   <span className="nm">{m.name}</span>
                   <span className="pct">{fmtPct(state.members.length)}</span>
+                  {m.color && (
+                    <IconButton size="small" title="Reset to default color" onClick={() => setColor(m.id, '')}>
+                      <DeleteIcon fontSize="inherit" style={{ fontSize: 12 }} />
+                    </IconButton>
+                  )}
                   <IconButton size="small" onClick={() => duplicateMember(i)}><ContentCopyIcon fontSize="inherit" /></IconButton>
                   <IconButton size="small" color="error" onClick={() => removeMember(m.id)}><DeleteIcon fontSize="inherit" /></IconButton>
                 </li>
