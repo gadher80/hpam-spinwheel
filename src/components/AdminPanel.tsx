@@ -207,6 +207,9 @@ export default function AdminPanel({ state, update, onSpin }: AdminPanelProps) {
               <Button fullWidth variant={state.winnerDisplayMode === 'popup' ? 'contained' : 'outlined'} onClick={() => update({ winnerDisplayMode: 'popup' })}>Popup Dialog</Button>
               <Button fullWidth variant={state.winnerDisplayMode === 'wheel' ? 'contained' : 'outlined'} onClick={() => update({ winnerDisplayMode: 'wheel' })}>Directly on Wheel</Button>
             </Stack>
+            <FormControlLabel labelPlacement="start" sx={{ justifyContent: 'space-between', ml: 0 }}
+              control={<Switch checked={state.showWinnerPhoto} onChange={(e) => update({ showWinnerPhoto: e.target.checked })} />}
+              label="Show winner photo (off = name only)" />
 
             <Typography variant="caption">Confetti effect</Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1 }}>

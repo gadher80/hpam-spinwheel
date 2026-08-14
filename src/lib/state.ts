@@ -30,6 +30,7 @@ export interface WheelState {
   autoRemoveWinner: boolean;
   autoSwitchResults: boolean;
   winnerDisplayMode: WinnerDisplayMode;
+  showWinnerPhoto: boolean;
   confettiEffect: ConfettiEffect;
   spinSound: string;
   spinVol: number;
@@ -76,6 +77,7 @@ export function defaultState(): WheelState {
     autoRemoveWinner: false,
     autoSwitchResults: false,
     winnerDisplayMode: 'popup',
+    showWinnerPhoto: true,
     confettiEffect: 'shapes',
     spinSound: 'tick',
     spinVol: 0.25,
