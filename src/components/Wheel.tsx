@@ -211,7 +211,7 @@ const Wheel = forwardRef<WheelHandle, WheelProps>(({ state, onWinner, onHubClick
                 onError={(e) => handleImgError(e, winnerCard.photo)}
               />
             )}
-            <small>WINNER</small>
+            <small>Speaker</small>
             <span>{winnerCard.name || '—'}</span>
           </div>
         </div>
